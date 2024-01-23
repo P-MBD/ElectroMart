@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './src/screens/HomeScreen';
 import FavoriteItemsScreen from './src/screens/FavoriteItemsScreen';
 import CartScreen from './src/screens/CartScreen';
 import OrdersScreen from './src/screens/OrdersScreen';
+import {Ionicons} from '@expo/vector-icons';
 const Stack= createNativeStackNavigator();
 const Tab=createBottomTabNavigator();
 
@@ -21,7 +22,32 @@ function HomeStack(){
 export default function App() {
   return (
     <NavigationContainer>
-    <Tab.Navigator>
+    <Tab.Navigator
+    screenOptions={({route})=>({
+      headerShown:false,
+      tabBarShowLabel: false,
+      tabBarStyle:{
+        backgroundColor:'#4B5563',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius:30,
+      },
+      tabBarIcon: ({focused ,color, size }) => {
+        let iconName
+          if(route.name === 'Home'){
+            iconName = focused ?  'home' : 'home-outline'
+          } else if(route.name === 'Favorite'){
+            iconName= focused ? 'heart' : 'heart-outline'
+          } else if(route.name === 'Cart'){
+            iconName=focused ? 'cart' : 'cart-outline'
+          } else if(route.name === 'Orders'){
+            iconName=focused ? 'list' : 'list-outline'
+          }
+          return <Ionicons name={iconName} size={size} color={color} />
+      },
+      tabBarActiveTintColor:"white",
+      tabBarInactiveTintColor:"black",
+    })}
+    >
       <Tab.Screen name='Home' component={HomeStack} options={{tabBarLabel:'Home'}} />
       <Tab.Screen name='Favorite' component={FavoriteItemsScreen} options={{tabBarLabel:'Favorite'}} />
       <Tab.Screen name='Cart' component={CartScreen} options={{tabBarLabel:'Cart'}} />
