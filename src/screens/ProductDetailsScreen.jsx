@@ -38,7 +38,9 @@ useEffect(()=>{
     }else{
         try{
             const jsonValue =JSON.stringify(value);
+            console.log("Befor jsonValue", jsonValue);
             await AsyncStorage.setItem(`ItemInfo-${id}`,jsonValue);
+            console.log("Afetr jsonValue", jsonValue);
 
         }catch(error){
                     console.log(error);
