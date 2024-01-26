@@ -1,23 +1,62 @@
-import {SafeAreaView, View, Text, TouchableOpacity, TextInput } from 'react-native'
+import {SafeAreaView, View, Text, Image, TouchableOpacity, TextInput, FlatList, RefreshControl } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { Feather, SimpleLineIcons, MaterialIcons, Entypo, FontAwesome } from '@expo/vector-icons'
 import { useFonts, Inter_400Regular } from '@expo-google-fonts/inter'
-
+import ProductsList from '../../ProductsList.json'
 const HomeScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selected, setSelected] = useState(null);
   const[products, setProducts] =useState([]);
   const[refreshing, setRefreshing] = useState(false);
   const [networkError, setNetworkError] = useState(false);
+  //console.log("products",ProductsList)
   useEffect(()=>{
     setSelected("smartphone");
-  });
+    setProducts(ProductsList);
+  },[]);
+  //console.log(products);
   let [fontsLoaded] = useFonts({
     Inter_400Regular,
    });
    
    if (!fontsLoaded){
      return null;
+   }
+
+   const renderItem = ({item})=>{
+      return(
+        <View className='flex-row justify-between mb-5'>
+          {
+            item[0]&& (
+              <View className='bg-white shadow-md shadow-black rounded-lg w-48'>
+                  <TouchableOpacity>
+                    <Image source={{uri: item[0].image}} className='h-64 w-full rounded-t-2x1' resizeMode="contain" />
+                    <View>
+                        <Text>{item[0].name}</Text>
+                        <Text>{item[0].price}</Text>
+                    </View>
+                  </TouchableOpacity>
+              </View>
+            )
+          }
+           {
+            item[1]&& (
+              <View className='bg-white shadow-md shadow-black rounded-lg w-[180px]'>
+                  <TouchableOpacity>
+                    <Image source={{uri: item[1].image}} className='h-64 w-full rounded-t-2x1' resizeMode="contain" />
+                    <View>
+                        <Text>{item[1].name}</Text>
+                        <Text>{item[1].price}</Text>
+                    </View>
+                  </TouchableOpacity>
+              </View>
+            )
+          }
+        </View>
+      )
+   }
+   const handleRefresh= () => {
+
    }
 
   return (
@@ -71,6 +110,31 @@ const HomeScreen = () => {
           </TouchableOpacity>
       
         </View>
+        <FlatList
+        data={products
+          .filter(
+            (item) => 
+              item.category.toLowerCase() === selected &&  
+                (item.name.toLowerCase().includes(searchQuery.toLowerCase())||
+                    item.category.toLowerCase().includes(searchQuery.toLowerCase()))
+                  )
+                        .reduce((result, item, index, array) => {
+                            if(index%2 === 0){
+                                  result.push(array.slice(index, index + 2));
+              }
+              return result;
+           }, [])}
+        keyExtractor={(item)=> item.id}
+        renderItem={renderItem}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+        }
+        ListEmptyComponent={
+          <View>
+                <Text>No Products found</Text>
+          </View>
+        }
+         />
     </SafeAreaView>
   )
 }
