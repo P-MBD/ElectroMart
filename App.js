@@ -9,6 +9,7 @@ import CartScreen from './src/screens/CartScreen';
 import OrdersScreen from './src/screens/OrdersScreen';
 import {Ionicons} from '@expo/vector-icons';
 import ProductDetailsScreen from './src/screens/ProductDetailsScreen';
+import Toast from 'react-native-toast-message';
 const Stack= createNativeStackNavigator();
 const Tab=createBottomTabNavigator();
 
@@ -59,15 +60,9 @@ export default function App() {
       <Tab.Screen name='Cart' component={CartScreen} options={{tabBarLabel:'Cart'}} />
       <Tab.Screen name='Orders' component={OrdersScreen} options={{tabBarLabel:'Orders'}} />
     </Tab.Navigator>
+    <Toast />
     </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
