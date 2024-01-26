@@ -29,6 +29,7 @@ export default function App() {
     screenOptions={({route})=>({
       headerShown:false,
       tabBarShowLabel: false,
+      tabBarHideOnKeyboard: true,
       tabBarStyle:{
         backgroundColor:'#4B5563',
         borderTopLeftRadius: 30,

@@ -124,14 +124,16 @@ const HomeScreen = () => {
               }
               return result;
            }, [])}
-        keyExtractor={(item)=> item.id}
+        keyExtractor={(index)=> index}
         renderItem={renderItem}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
         }
         ListEmptyComponent={
           <View>
-                <Text>No Products found</Text>
+                <Text 
+                style={{fontFamily:"Inter_400Regular", fontSize:30 , color:'gray'}}
+                className='text-center'>No Products found</Text>
           </View>
         }
          />
