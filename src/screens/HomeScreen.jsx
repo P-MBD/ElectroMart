@@ -3,7 +3,10 @@ import React, {useEffect, useState} from 'react'
 import { Feather, SimpleLineIcons, MaterialIcons, Entypo, FontAwesome } from '@expo/vector-icons'
 import { useFonts, Inter_400Regular } from '@expo-google-fonts/inter'
 import ProductsList from '../../ProductsList.json'
+import { useNavigation } from '@react-navigation/native'
 const HomeScreen = () => {
+  const navigation = useNavigation();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selected, setSelected] = useState(null);
   const[products, setProducts] =useState([]);
@@ -29,7 +32,13 @@ const HomeScreen = () => {
           {
             item[0]&& (
               <View className='bg-white shadow-md shadow-black rounded-lg w-48'>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={()=> navigation.navigate("ProductDetails",{
+                    id: item[0].id,
+                    image: item[0].image,
+                    name: item[0].name,
+                    description : item[0].description,
+                    price:item[0].price,
+                 })}>
                     <Image source={{uri: item[0].image}} className='h-64 w-full rounded-t-2x1' resizeMode="contain" />
                     <View>
                         <Text>{item[0].name}</Text>
@@ -42,7 +51,15 @@ const HomeScreen = () => {
            {
             item[1]&& (
               <View className='bg-white shadow-md shadow-black rounded-lg w-[180px]'>
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                  onPress={()=> navigation.navigate("ProductDetails",{
+                    id: item[1].id,
+                    image: item[1].image,
+                    name: item[1].name,
+                    description : item[1].description,
+                    price:item[1].price,
+                 })}
+                  >
                     <Image source={{uri: item[1].image}} className='h-64 w-full rounded-t-2x1' resizeMode="contain" />
                     <View>
                         <Text>{item[1].name}</Text>

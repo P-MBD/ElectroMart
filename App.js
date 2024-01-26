@@ -8,6 +8,7 @@ import FavoriteItemsScreen from './src/screens/FavoriteItemsScreen';
 import CartScreen from './src/screens/CartScreen';
 import OrdersScreen from './src/screens/OrdersScreen';
 import {Ionicons} from '@expo/vector-icons';
+import ProductDetailsScreen from './src/screens/ProductDetailsScreen';
 const Stack= createNativeStackNavigator();
 const Tab=createBottomTabNavigator();
 
@@ -18,6 +19,7 @@ function HomeStack(){
     }}
     >
         <Stack.Screen name='HomeStack' component={HomeScreen} />
+        <Stack.Screen name='ProductDetails' component={ProductDetailsScreen} />
     </Stack.Navigator>
   )
 }
