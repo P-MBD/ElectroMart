@@ -9,7 +9,10 @@ import CartScreen from './src/screens/CartScreen';
 import OrdersScreen from './src/screens/OrdersScreen';
 import {Ionicons} from '@expo/vector-icons';
 import ProductDetailsScreen from './src/screens/ProductDetailsScreen';
+import { store } from './app/store'
+import { Provider } from 'react-redux'
 import Toast from 'react-native-toast-message';
+
 const Stack= createNativeStackNavigator();
 const Tab=createBottomTabNavigator();
 
@@ -28,7 +31,8 @@ function HomeStack(){
 export default function App() {
   return (
     <NavigationContainer>
-    <Tab.Navigator
+       <Provider store={store}>
+           <Tab.Navigator
     screenOptions={({route})=>({
       headerShown:false,
       tabBarShowLabel: false,
@@ -59,7 +63,8 @@ export default function App() {
       <Tab.Screen name='Favorite' component={FavoriteItemsScreen} options={{tabBarLabel:'Favorite'}} />
       <Tab.Screen name='Cart' component={CartScreen} options={{tabBarLabel:'Cart'}} />
       <Tab.Screen name='Orders' component={OrdersScreen} options={{tabBarLabel:'Orders'}} />
-    </Tab.Navigator>
+           </Tab.Navigator>
+    </Provider>
     <Toast />
     </NavigationContainer>
   );
