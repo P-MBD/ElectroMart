@@ -9,7 +9,7 @@ import CartScreen from './src/screens/CartScreen';
 import OrdersScreen from './src/screens/OrdersScreen';
 import {Ionicons} from '@expo/vector-icons';
 import ProductDetailsScreen from './src/screens/ProductDetailsScreen';
-import { store } from './app/store'
+import { store } from './store'
 import { Provider } from 'react-redux'
 import Toast from 'react-native-toast-message';
 

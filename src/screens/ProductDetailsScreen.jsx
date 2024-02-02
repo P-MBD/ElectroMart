@@ -5,8 +5,13 @@ import BackButton from '../components/BackButton'
 import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Toast from 'react-native-toast-message'
+import { addToBasket } from '../../features/basketSlice'
+import { useDispatch,useSelector } from 'react-redux'
 const ProductDetailsScreen = () => {
-    const route = useRoute()
+    const route = useRoute();
+    const dispatch = useDispatch();
+    const basketitems = useSelector((state)=> state.basket);
+    console.log("basket items", basketitems);
    const {id, image, name, description, price} = route.params;
    const [isLiked, setIsLiked] = useState(false);
    const [Added, setAdded] = useState(false); 
@@ -47,6 +52,27 @@ useEffect(()=>{
         }
     }
    };
+
+   const addItemtoCart = () => {
+    if(Added){
+        Toast.show({
+            type:'error',
+            text1:'Item Already Added to Cart!',
+            visibilityTime:3000,
+            autoHide:true,
+        })
+    }else{
+        dispatch((addToBasket({id, image, name, price})));
+        setAdded(true)
+        Toast.show({
+            type:'success',
+            text1:'Item Added to Cart',
+            visibilityTime:3000,
+            autoHide:true,
+            position:"bottom", 
+        })
+    }
+   }
   return (
     <View className='bg-white flex-1 justify-between'>
         <Image 
@@ -69,7 +95,7 @@ useEffect(()=>{
                 <Text className="text-x1 tracking-widest font-bold text-gray-700">{description}</Text>
             </View>
 
-            <TouchableOpacity className="bg-indigo-500 mx-3 rounded-md p-3 flex-row justify-between mt-5 mb-1">
+            <TouchableOpacity onPress={addItemtoCart} className="bg-indigo-500 mx-3 rounded-md p-3 flex-row justify-between mt-5 mb-1">
                 <View className="flex-row space-x-1 items-center">
                     <Ionicons name="cart-sharp" size={30} color='white'/>
                     <Text className='text-white font-normal text-lg'>Add to cart </Text>
