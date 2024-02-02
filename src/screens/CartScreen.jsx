@@ -3,6 +3,7 @@ import React from 'react'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
+import { updateQuantity } from '../../features/basketSlice'
 const cartGif =  require('../../assets/emptyCart.gif');
 const CartScreen = () => {
   const navigation = useNavigation();
@@ -19,11 +20,11 @@ const CartScreen = () => {
           </View>
 
           <View className="flex-1 flex-row justify-end items-end space-x-3">
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> handleUpdateQuantity(item.id, item.quantity-1 ,item.price)}>
                 <AntDesign name="minuscircleo" size={25} color="black" />
             </TouchableOpacity>
             <Text>{item.quantity}</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> handleUpdateQuantity(item.id, item.quantity+1 ,item.price)}>
                  <AntDesign name="pluscircleo" size={25} color="#757575" />
             </TouchableOpacity>
             <TouchableOpacity>
@@ -32,6 +33,18 @@ const CartScreen = () => {
           </View>
       </View>
   );
+  const handleUpdateQuantity = (id, quantity, price) => {
+    dispach(updateQuantity({id, quantity}));
+    const item= items.find((item)=> item.id === id );
+    const prevQuantity = item.quantity;
+    const newQuantity= quantity;
+    const diffQuantity = newQuantity- prevQuantity;
+    const itemPrice = price;
+    dispach({
+      type:"basket/updateTotalPrice",
+      payload: itemPrice* diffQuantity,
+    });
+  };
 
   return (
    <SafeAreaView className='flex-1 bg-white'>
@@ -53,6 +66,15 @@ const CartScreen = () => {
             </View>
           }
         />
+      </View>
+
+
+
+      <View className="flex-1 mx-5 space-y-5">
+          <Text className="font-semibold text-lg">Total: $ {totalPrice?.toFixed(2)}</Text>
+          <TouchableOpacity className="bg-gray-600 py-3  rounded-3xl mx-10">
+              <Text>Proceed to Checkout</Text>
+          </TouchableOpacity>
       </View>
    </SafeAreaView>
   )
