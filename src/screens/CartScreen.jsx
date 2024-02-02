@@ -20,7 +20,7 @@ const CartScreen = () => {
           </View>
 
           <View className="flex-1 flex-row justify-end items-end space-x-3">
-            <TouchableOpacity onPress={()=> handleUpdateQuantity(item.id, item.quantity-1 ,item.price)}>
+            <TouchableOpacity onPress={()=> handleUpdateQuantity(item.id, item.quantity-1 ,item.price)} disabled={item.quantity <= 1}>
                 <AntDesign name="minuscircleo" size={25} color="black" />
             </TouchableOpacity>
             <Text>{item.quantity}</Text>

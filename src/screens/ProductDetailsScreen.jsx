@@ -1,6 +1,6 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { useRoute } from '@react-navigation/native'
+import React, {  useState } from 'react'
+import { useFocusEffect, useRoute } from '@react-navigation/native'
 import BackButton from '../components/BackButton'
 import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -16,18 +16,19 @@ const ProductDetailsScreen = () => {
    const [isLiked, setIsLiked] = useState(false);
    const [Added, setAdded] = useState(false); 
 
-useEffect(()=>{
-    const checkLiked = async () => {
-        const storedValue= await AsyncStorage.getItem(`itemInfo-${id}`);
-        console.log('storedValue',storedValue);
-        if(storedValue !== null){
-            setIsLiked(true);
-            console.log('if storedValue',storedValue);
-        }
-    };
-    checkLiked();
-},[id]);
-
+useFocusEffect(
+    React.useCallback(()=>{
+        checkLiked();
+    },[])
+    )
+const checkLiked = async () => {
+    const storedValue= await AsyncStorage.getItem(`itemInfo-${id}`);
+    console.log('storedValue',storedValue);
+    if(storedValue !== null){
+        setIsLiked(true);
+        console.log('if storedValue',storedValue);
+    }
+};
    const AddToFavorite= async(value, prevLiked) => {
     console.log("prevLiked=",prevLiked);
     setIsLiked(!prevLiked)
