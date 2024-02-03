@@ -1,14 +1,23 @@
-import { View, Text, Image, SafeAreaView, TouchableOpacity, FlatList } from 'react-native'
-import React from 'react'
+import { View, Text, Image, SafeAreaView, TouchableOpacity, FlatList, TextInput } from 'react-native'
+import React, { useState } from 'react'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateQuantity } from '../../features/basketSlice'
+import {Toast} from 'react-native-toast-message'
+import Modal from 'react-native-modal'
 const cartGif =  require('../../assets/emptyCart.gif');
 const CartScreen = () => {
   const navigation = useNavigation();
   const dispach = useDispatch();
   const {items, totalPrice} = useSelector((state)=> state.basket);
+  const [showModal, setShowModal] = useState(false);
+ const[name, setName]= useState('');
+ const[phoneNumber, setPhoneNumber] = useState('');
+ const[address, setAddress] = useState('');
+
+ console.log("show modal?=",showModal);
+
   const renderItem =({item})=>(
       <View className="flex-row my-1 mx-2 border-b border-gray-100 pb-3">
           <View className="flex-row items-center">
@@ -72,10 +81,53 @@ const CartScreen = () => {
 
       <View className="flex-1 mx-5 space-y-5">
           <Text className="font-semibold text-lg">Total: $ {totalPrice?.toFixed(2)}</Text>
-          <TouchableOpacity className="bg-gray-600 py-3  rounded-3xl mx-10">
+          <TouchableOpacity className="bg-gray-600 py-3  rounded-3xl mx-10" onPress={()=>{
+            items.length>0 ?setShowModal(true):Toast.show({
+              type:"error",
+              text1:"Your Cart is empty",
+            })
+          }}>
               <Text>Proceed to Checkout</Text>
           </TouchableOpacity>
       </View>
+
+
+    
+          <Modal 
+          backdropOpacity={0.8}
+          animationIn={'zoomInDown'}
+          animationOut={'zoomOutDown'}
+          animationInTiming={1000}
+          animationOutTiming={300}
+          backdropTransitionInTiming={1000}
+          backdropTransitionOutTiming={2000}
+          hideModalContentWhileAnimating={true}
+          isVisible={showModal} onBackButtonPress={()=> setShowModal(false)}>
+            <View className="absolute bottom-0 left-0 right-0 bg-gray-200 rounded-t-3x1 p-3 pt-8">
+              <TouchableOpacity 
+              onPress={()=> setShowModal(false)} 
+              >
+                  <MaterialIcons name="close" size={24} color="gray" />
+                  <Text className='font-bold  text-lg  mb-5'>Customer Information</Text>
+                  <View className='mb-3'>
+                      <Text className='border border-gray-300 p-2 mt-1 rounded bg-white'>Name</Text>
+                      <TextInput value={name} onChangeText={setName} />
+                  </View>
+                  <View className='mb-3'>
+                      <Text className='border border-gray-300 p-2 mt-1 rounded bg-white'>Phone number</Text>
+                      <TextInput value={phoneNumber} onChangeText={setPhoneNumber} />
+                  </View>
+                  <View className='mb-3'>
+                      <Text className='border border-gray-300 p-2 mt-1 rounded bg-white'>Name</Text>
+                      <TextInput value={address} onChangeText={setAddress} />
+                  </View>
+              </TouchableOpacity>
+              <TouchableOpacity className='bg-gray-600 py-3 rounded-3xl mt-5'>
+                  <Text className="text-white text-center text-base">Checkout</Text>
+              </TouchableOpacity>
+             </View>
+          </Modal>
+      
    </SafeAreaView>
   )
 }
