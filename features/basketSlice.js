@@ -17,7 +17,11 @@ export const basketSlice = createSlice({
         }
         state.totalPrice += price
     },
-    removeFromBasket:(state, action)=>{},
+    removeFromBasket:(state, action)=>{
+        const {id, price, quantity} = action.payload;
+        state.items = state.items.filter((item)=>item.id !== id);
+        state.totalPrice -= price * quantity;
+    },
     updateQuantity:(state,action)=> {
         const {id, quantity} = action.payload
         const itemIndex = state.items.findIndex((item)=> item.id === id)

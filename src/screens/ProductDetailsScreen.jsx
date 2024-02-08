@@ -15,7 +15,8 @@ const ProductDetailsScreen = () => {
    const {id, image, name, description, price} = route.params;
    const [isLiked, setIsLiked] = useState(false);
    const [Added, setAdded] = useState(false); 
-
+    const {items} = useSelector((state)=>state.basket);
+    console.log("redux items", items);
 useFocusEffect(
     React.useCallback(()=>{
         checkLiked();
@@ -55,7 +56,9 @@ const checkLiked = async () => {
    };
 
    const addItemtoCart = () => {
-    if(Added){
+    const found = items.find(item => item.id === id)
+    console.log("found?=", found);
+    if(found){
         Toast.show({
             type:'error',
             text1:'Item Already Added to Cart!',

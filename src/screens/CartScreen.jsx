@@ -3,8 +3,8 @@ import React, { useState } from 'react'
 import { AntDesign, MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateQuantity } from '../../features/basketSlice'
-import {Toast} from 'react-native-toast-message'
+import { removeFromBasket, updateQuantity } from '../../features/basketSlice'
+import Toast from 'react-native-toast-message'
 import Modal from 'react-native-modal'
 const cartGif =  require('../../assets/emptyCart.gif');
 const CartScreen = () => {
@@ -17,7 +17,9 @@ const CartScreen = () => {
  const[address, setAddress] = useState('');
 
  console.log("show modal?=",showModal);
-
+  const handleRemoveItem = (id, price, quantity) => {
+    dispach(removeFromBasket({id, price, quantity}));
+  }
   const renderItem =({item})=>(
       <View className="flex-row my-1 mx-2 border-b border-gray-100 pb-3">
           <View className="flex-row items-center">
@@ -36,7 +38,7 @@ const CartScreen = () => {
             <TouchableOpacity onPress={()=> handleUpdateQuantity(item.id, item.quantity+1 ,item.price)}>
                  <AntDesign name="pluscircleo" size={25} color="#757575" />
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> handleRemoveItem(item.id, item.price, item.quantity)}>
                  <AntDesign name="delete" size={25} color="red" />
             </TouchableOpacity>
           </View>
@@ -82,7 +84,7 @@ const CartScreen = () => {
       <View className="flex-1 mx-5 space-y-5">
           <Text className="font-semibold text-lg">Total: $ {totalPrice?.toFixed(2)}</Text>
           <TouchableOpacity className="bg-gray-600 py-3  rounded-3xl mx-10" onPress={()=>{
-            items.length>0 ?setShowModal(true):Toast.show({
+            items.length>0 ?setShowModal(true): Toast.show({
               type:"error",
               text1:"Your Cart is empty",
             })
