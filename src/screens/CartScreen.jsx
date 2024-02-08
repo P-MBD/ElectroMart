@@ -57,6 +57,18 @@ const CartScreen = () => {
     });
   };
 
+console.log('name='+name+'phoneNumber'+phoneNumber+'address'+address)
+const handleSubmit= () => {
+  if(!name || !phoneNumber || !address){
+    Toast.show({
+        type:"error",
+        text1:'Please fill all the fields',
+        position:'top'
+    });
+    return;
+  }
+  setShowModal(false);
+}
   return (
    <SafeAreaView className='flex-1 bg-white'>
       <View className="flex-row items-center mx-3 my-1 border-b border-gray-300 pb-2">
@@ -97,6 +109,7 @@ const CartScreen = () => {
     
           <Modal 
           backdropOpacity={0.8}
+          backdropColor='transparent'
           animationIn={'zoomInDown'}
           animationOut={'zoomOutDown'}
           animationInTiming={1000}
@@ -124,7 +137,7 @@ const CartScreen = () => {
                       <TextInput value={address} onChangeText={setAddress} />
                   </View>
               </TouchableOpacity>
-              <TouchableOpacity className='bg-gray-600 py-3 rounded-3xl mt-5'>
+              <TouchableOpacity onPress={handleSubmit} className='bg-gray-600 py-3 rounded-3xl mt-5'>
                   <Text className="text-white text-center text-base">Checkout</Text>
               </TouchableOpacity>
              </View>
